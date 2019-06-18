@@ -4,8 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/labstack/echo"
-
+	"github.com/alterra/go-package/status"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
 )
@@ -45,18 +44,18 @@ func NewLogger() (*Log, error) {
 }
 
 // GenLog for general log
-func GenLog(c echo.Context, dataRequest interface{}, resp interface{}, info string) {
+func GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string) {
 	log, errLog := NewLogger()
 	if errLog != nil {
 		panic(errLog)
 	}
 	// Create log
 	log.Logger.WithFields(logrus.Fields{
-		"remote_ip": c.RealIP(),
-		"protocol":  c.Request().Proto,
-		"host":      c.Request().Host,
-		"uri":       c.Request().RequestURI,
-		"headers":   c.Request().Header,
+		"remote_ip": c.IP,
+		"protocol":  c.Protocol,
+		"host":      c.Host,
+		"uri":       c.URI,
+		"headers":   c.Headers,
 		"request":   dataRequest,
 		"response":  resp,
 	}).Info(info)
