@@ -15,10 +15,10 @@ type (
 	}
 )
 
-func NewLogger() (*Log, error) {
+func NewLogger(logPath string) (*Log, error) {
 	l := logrus.New()
 	logf, err := rotatelogs.New(
-		"storages/logs/access_log.%Y%m%d",
+		logPath+".%Y%m%d",
 
 		// symlink current log to this file
 		//rotatelogs.WithLinkName("/tmp/app_access.log"),
@@ -44,8 +44,8 @@ func NewLogger() (*Log, error) {
 }
 
 // GenLog for general log
-func GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string) {
-	log, errLog := NewLogger()
+func GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string, logPath string) {
+	log, errLog := NewLogger(logPath)
 	if errLog != nil {
 		panic(errLog)
 	}
