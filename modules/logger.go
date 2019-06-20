@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/alterra/go-package/status"
+	"github.com/hilmansyafei/go-package/status"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
 )
