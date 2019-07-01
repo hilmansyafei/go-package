@@ -21,14 +21,14 @@ type DataResult struct {
 
 // DataNotif : hold data DataNotif
 type DataNotif struct {
-	Amount        int    `json:"amount" bson:"amount"`
-	Bank          string `json:"bank" bson:"bank"`
-	MerchantID    string `json:"merchantID" bson:"merchantID"`
-	Number        string `json:"number" bson:"number"`
-	OrderID       string `json:"orderID" bson:"orderID"`
-	Status        string `json:"status" bson:"status"`
-	Time          Time   `json:"time" bson:"time"`
-	TransactionID string `json:"transactionID" bson:"transactionID"`
+	Amount        float64 `json:"amount" bson:"amount"`
+	Bank          string  `json:"bank" bson:"bank"`
+	MerchantID    string  `json:"merchantID" bson:"merchantID"`
+	Number        string  `json:"number" bson:"number"`
+	OrderID       string  `json:"orderID" bson:"orderID"`
+	Status        string  `json:"status" bson:"status"`
+	Time          Time    `json:"time" bson:"time"`
+	TransactionID string  `json:"transactionID" bson:"transactionID"`
 }
 
 // Time : hold data Time
