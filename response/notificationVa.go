@@ -23,6 +23,7 @@ type DataResult struct {
 type DataNotif struct {
 	Amount        int    `json:"amount" bson:"amount"`
 	Bank          string `json:"bank" bson:"bank"`
+	MerchantID    string `json:"merchantID" bson:"merchantID"`
 	Number        string `json:"number" bson:"number"`
 	OrderID       string `json:"orderID" bson:"orderID"`
 	Status        string `json:"status" bson:"status"`
