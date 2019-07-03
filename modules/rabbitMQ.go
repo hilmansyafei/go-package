@@ -12,7 +12,6 @@ import (
 type RabbitMQProvider interface {
 	Publish(routingKey string, body []byte) error
 	PublishWithDelay(routingKey string, body []byte, delay int64) error
-	Test() string
 }
 
 // RabbitMQ stores rabbitmq's connection information
