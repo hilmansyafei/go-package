@@ -2,7 +2,7 @@ package response
 
 // NotificationVa : hold data NotificationVa
 type NotificationVa struct {
-	Request   DataRequest `json:"pid" bson:"pid"`
+	Request   DataRequest `json:"request" bson:"request"`
 	Signature string      `json:"signature" bson:"signature"`
 }
 
