@@ -86,14 +86,14 @@ func (rmq *RabbitMQ) load() error {
 }
 
 // declareConsumer declares all queues and bindings for the consumer
-func (rmq *RabbitMQ) declareConsumer() error {
+func (rmq *RabbitMQ) declareConsumer(queue string, routKey string) error {
 	var err error
 
-	delayedQueue, err := rmq.Chann.QueueDeclare("user-published-queue", true, false, false, false, nil)
+	delayedQueue, err := rmq.Chann.QueueDeclare(queue, true, false, false, false, nil)
 	if err != nil {
 		return err
 	}
-	err = rmq.Chann.QueueBind(delayedQueue.Name, "user.event.publish", "delayed", false, nil)
+	err = rmq.Chann.QueueBind(delayedQueue.Name, routKey, "delayed", false, nil)
 	if err != nil {
 		return err
 	}
