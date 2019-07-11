@@ -9,12 +9,35 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type (
-	Log struct {
-		Logger *logrus.Logger
-	}
-)
+// LogProvider : provider logger
+type LogProvider interface {
+	GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string) error
+	GenErrLog(logData map[string]interface{}, msg string) error
+}
 
+// Log : handler
+type Log struct {
+	Logger *logrus.Logger
+}
+
+type contextor interface {
+	Context() map[string]interface{}
+}
+
+type causer interface {
+	Cause() error
+}
+
+// Cause : cause function
+func Cause(err error) error {
+	if e, ok := err.(causer); ok {
+		return e.Cause()
+	}
+
+	return nil
+}
+
+// NewLogger : init Log
 func NewLogger(logPath string) (*Log, error) {
 	l := logrus.New()
 	logf, err := rotatelogs.New(
@@ -43,12 +66,14 @@ func NewLogger(logPath string) (*Log, error) {
 	}, nil
 }
 
+// GenErrLog : general logger
+func (log *Log) GenErrLog(logData map[string]interface{}, msg string) error {
+	log.Logger.WithFields(logData).Error(msg)
+	return nil
+}
+
 // GenLog for general log
-func GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string, logPath string) {
-	log, errLog := NewLogger(logPath)
-	if errLog != nil {
-		panic(errLog)
-	}
+func (log *Log) GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string) error {
 	// Create log
 	log.Logger.WithFields(logrus.Fields{
 		"remote_ip": c.IP,
@@ -59,4 +84,27 @@ func GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string
 		"request":   dataRequest,
 		"response":  resp,
 	}).Info(info)
+
+	return nil
+}
+
+// Context : get err context
+func Context(err error) map[string]interface{} {
+	ctx := make(map[string]interface{})
+
+	for err != nil {
+		if e, ok := err.(contextor); ok {
+			for key, value := range e.Context() {
+				ctx[key] = value
+			}
+		}
+
+		cause, ok := err.(causer)
+		if !ok {
+			break
+		}
+
+		err = cause.Cause()
+	}
+	return ctx
 }
