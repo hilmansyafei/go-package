@@ -44,7 +44,8 @@ type MongoProvider interface {
 	Update(collection string, query bson.M, update interface{}) error
 	GetAll(collection string, mdl *[]interface{}) error
 	GetByID(collection string, ID bson.ObjectId, mdl *interface{}) error
-	GetOne(collection string, query bson.M, mdl interface{}) error
+	Get(collection string, query bson.M, mdl *[]interface{}) error
+	GetOne(collection string, query bson.M, mdl *interface{}) error
 	Delete(collection string, query bson.M) error
 	DeleteID(collection string, ID bson.ObjectId) error
 	DeleteAll(collection string, query bson.M) (*mgo.ChangeInfo, error)
@@ -106,11 +107,16 @@ func (m *Mongo) GetByID(collection string, ID bson.ObjectId, mdl *interface{}) e
 	return Col.FindId(ID).One(&mdl)
 }
 
-// GetOne : Get one record
-func (m *Mongo) GetOne(collection string, query bson.M, mdl interface{}) error {
+// Get : Get list record
+func (m *Mongo) Get(collection string, query bson.M, mdl *[]interface{}) error {
 	Col := m.DB.C(collection)
-	Col.Find(query).One(&mdl)
-	return nil
+	return Col.Find(query).One(&mdl)
+}
+
+// GetOne : Get one record
+func (m *Mongo) GetOne(collection string, query bson.M, mdl *interface{}) error {
+	Col := m.DB.C(collection)
+	return Col.Find(query).One(&mdl)
 }
 
 // Find : Get records with paging query
