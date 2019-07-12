@@ -104,19 +104,19 @@ func (m *Mongo) GetAll(collection string, mdl *[]interface{}) error {
 // GetByID : Get record with condition, return unique result
 func (m *Mongo) GetByID(collection string, ID bson.ObjectId, mdl *interface{}) error {
 	Col := m.DB.C(collection)
-	return Col.FindId(ID).One(&mdl)
+	return Col.FindId(ID).One(mdl)
 }
 
 // Get : Get list record
 func (m *Mongo) Get(collection string, query bson.M, mdl *[]interface{}) error {
 	Col := m.DB.C(collection)
-	return Col.Find(query).One(&mdl)
+	return Col.Find(query).All(mdl)
 }
 
 // GetOne : Get one record
 func (m *Mongo) GetOne(collection string, query bson.M, mdl *interface{}) error {
 	Col := m.DB.C(collection)
-	return Col.Find(query).One(&mdl)
+	return Col.Find(query).One(mdl)
 }
 
 // Find : Get records with paging query
