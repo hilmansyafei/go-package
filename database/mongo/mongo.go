@@ -2,7 +2,7 @@ package mongo
 
 import (
 	"errors"
-	"log"
+	"time"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -63,10 +63,17 @@ type MongoProvider interface {
 
 // New is create mysql client
 func New(cfg Configuration) (*Mongo, error) {
-	session, err := mgo.Dial(cfg.Host + "/" + cfg.Database)
+	info := &mgo.DialInfo{
+		Addrs:    []string{cfg.Host},
+		Timeout:  60 * time.Second,
+		Database: cfg.Database,
+		Username: cfg.User,
+		Password: cfg.Password,
+	}
+	session, err := mgo.DialWithInfo(info)
 	// Check for error
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		return &Mongo{}, err
 	}
 	db := session.DB(cfg.Database)
 	return &Mongo{DB: db}, err
