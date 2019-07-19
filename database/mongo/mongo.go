@@ -58,6 +58,7 @@ type MongoProvider interface {
 	DeleteID(collection string, ID bson.ObjectId) error
 	DeleteAll(collection string, query bson.M) (*mgo.ChangeInfo, error)
 	Find(collection string, query bson.M, mdl *[]interface{}, pagingQuery PagingQuery) error
+	UpdateApply(collection string, query bson.M, change mgo.Change, doc *map[string]interface{}) (*mgo.ChangeInfo, error)
 }
 
 // New is create mysql client
@@ -101,6 +102,12 @@ func (m *Mongo) DeleteAll(collection string, query bson.M) (*mgo.ChangeInfo, err
 func (m *Mongo) Update(collection string, query bson.M, update interface{}) error {
 	Col := m.DB.C(collection)
 	return Col.Update(query, update)
+}
+
+// UpdateAppy : update data with mgp.change
+func (m *Mongo) UpdateApply(collection string, query bson.M, change mgo.Change, doc *map[string]interface{}) (*mgo.ChangeInfo, error) {
+	Col := m.DB.C(collection)
+	return Col.Find(query).Apply(change, doc)
 }
 
 // GetAll record with primary key, return unique result

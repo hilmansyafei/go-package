@@ -41,6 +41,7 @@ var (
 	// List Of Success
 	OKSuccess      = NewSuccess(200, "Request Successed")
 	CreatedSuccess = NewSuccess(201, "The request has been fulfilled")
+	DataNotFound   = NewSuccess(404, "Data Not Found")
 
 	// List Of Error (Request)
 	BadRequestError           = NewError(400, "Bad Request")
