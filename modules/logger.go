@@ -13,28 +13,12 @@ import (
 type LogProvider interface {
 	GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string) error
 	GenErrLog(logData map[string]interface{}, msg string) error
+	GenReqLog(logData map[string]interface{}, msg string) error
 }
 
 // Log : handler
 type Log struct {
 	Logger *logrus.Logger
-}
-
-type contextor interface {
-	Context() map[string]interface{}
-}
-
-type causer interface {
-	Cause() error
-}
-
-// Cause : cause function
-func Cause(err error) error {
-	if e, ok := err.(causer); ok {
-		return e.Cause()
-	}
-
-	return nil
 }
 
 // NewLogger : init Log
@@ -88,23 +72,8 @@ func (log *Log) GenLog(c status.Log, dataRequest interface{}, resp interface{}, 
 	return nil
 }
 
-// Context : get err context
-func Context(err error) map[string]interface{} {
-	ctx := make(map[string]interface{})
-
-	for err != nil {
-		if e, ok := err.(contextor); ok {
-			for key, value := range e.Context() {
-				ctx[key] = value
-			}
-		}
-
-		cause, ok := err.(causer)
-		if !ok {
-			break
-		}
-
-		err = cause.Cause()
-	}
-	return ctx
+// GenReqLog for request log
+func (log *Log) GenReqLog(logData map[string]interface{}, msg string) error {
+	log.Logger.WithFields(logData).Info(msg)
+	return nil
 }
