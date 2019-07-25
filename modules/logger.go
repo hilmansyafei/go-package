@@ -13,7 +13,7 @@ import (
 type LogProvider interface {
 	GenLog(c status.Log, dataRequest interface{}, resp interface{}, info string) error
 	GenErrLog(logData map[string]interface{}, msg string) error
-	GenReqLog(logData map[string]interface{}, msg string) error
+	GenAnyLog(logData map[string]interface{}, msg string) error
 }
 
 // Log : handler
@@ -72,8 +72,8 @@ func (log *Log) GenLog(c status.Log, dataRequest interface{}, resp interface{}, 
 	return nil
 }
 
-// GenReqLog for request log
-func (log *Log) GenReqLog(logData map[string]interface{}, msg string) error {
+// GenAnyLog for request log
+func (log *Log) GenAnyLog(logData map[string]interface{}, msg string) error {
 	log.Logger.WithFields(logData).Info(msg)
 	return nil
 }
