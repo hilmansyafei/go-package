@@ -111,7 +111,7 @@ func (m *Mongo) Update(collection string, query bson.M, update interface{}) erro
 	return Col.Update(query, update)
 }
 
-// UpdateAppy : update data with mgp.change
+// UpdateApply : update data with mgp.change
 func (m *Mongo) UpdateApply(collection string, query bson.M, change mgo.Change, doc *map[string]interface{}) (*mgo.ChangeInfo, error) {
 	Col := m.DB.C(collection)
 	return Col.Find(query).Apply(change, doc)
@@ -172,6 +172,11 @@ func (m *MongoMock) DeleteAll(collection string, query bson.M) (*mgo.ChangeInfo,
 // Update all fields
 func (m *MongoMock) Update(collection string, query bson.M, update interface{}) error {
 	return nil
+}
+
+// UpdateApply : update data with mgp.change
+func (m *MongoMock) UpdateApply(collection string, query bson.M, change mgo.Change, doc *map[string]interface{}) (*mgo.ChangeInfo, error) {
+	return nil, nil
 }
 
 // GetAll record with primary key, return unique result
