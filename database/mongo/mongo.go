@@ -41,6 +41,7 @@ type PagingQuery struct {
 
 // MongoMock : hold global variabel
 type MongoMock struct {
+	CollectionsReturn    map[string]interface{}
 	InterfaceReturn      interface{}
 	InterfaceReturnArray []interface{}
 	Data                 string
@@ -208,9 +209,17 @@ func (m *MongoMock) Get(collection string, query bson.M, mdl *[]interface{}) err
 
 // GetOne : Get one record
 func (m *MongoMock) GetOne(collection string, query bson.M, mdl *interface{}) error {
-	*mdl = m.InterfaceReturn
-	if m.InterfaceReturn == nil {
-		return errors.New("error")
+	if len(m.CollectionsReturn) > 0 {
+		for table, response := range m.CollectionsReturn {
+			if collection == table {
+				if response == nil {
+					return errors.New("error")
+				} else if response == "not found" {
+					return errors.New("not found")
+				}
+				*mdl = response
+			}
+		}
 	}
 	return nil
 }
