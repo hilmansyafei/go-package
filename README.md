@@ -35,6 +35,6 @@ Below is the packages used by this project
 to use this package in your app just import the package you want
 ```
 import (
-    "github.com/sepulsa/canopus-gope/modules"
+    "github.com/hilmansyafei/go-package/modules"
 )
 ```

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/sepulsa/canopus-gope/response"
-	"github.com/sepulsa/canopus-gope/status"
+	"github.com/hilmansyafei/go-package/response"
+	"github.com/hilmansyafei/go-package/status"
 )
 
 // GenerateMockServer is function to generate mock server with,
