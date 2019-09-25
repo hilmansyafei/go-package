@@ -1,4 +1,4 @@
-// Package status is used to write status based on Sedekahnesia standard
+// Package status is used to write status based on Canopus standard
 package status
 
 import "net/http"

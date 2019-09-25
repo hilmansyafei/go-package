@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/globalsign/mgo"
+	"github.com/globalsign/mgo/bson"
 )
 
 // BaseStruct struct
@@ -60,6 +60,7 @@ type MongoProvider interface {
 	DeleteAll(collection string, query bson.M) (*mgo.ChangeInfo, error)
 	Find(collection string, query bson.M, mdl *[]interface{}, pagingQuery PagingQuery) error
 	UpdateApply(collection string, query bson.M, change mgo.Change, doc *map[string]interface{}) (*mgo.ChangeInfo, error)
+	Pipe(collection string, query []bson.M, mdl *[]interface{}) error
 }
 
 // New is create mysql client
@@ -145,7 +146,14 @@ func (m *Mongo) GetOne(collection string, query bson.M, mdl *interface{}) error 
 // Find : Get records with paging query
 func (m *Mongo) Find(collection string, query bson.M, mdl *[]interface{}, pagingQuery PagingQuery) error {
 	Col := m.DB.C(collection)
-	return Col.Find(nil).Sort(pagingQuery.Sort).Skip(pagingQuery.Offset).Limit(pagingQuery.Limit).All(mdl)
+	return Col.Find(query).Sort(pagingQuery.Sort).Skip(pagingQuery.Offset).Limit(pagingQuery.Limit).All(mdl)
+}
+
+// Pipe : Function to join 1 or more collection.
+func (m *Mongo) Pipe(collection string, query []bson.M, mdl *[]interface{}) error {
+	Col := m.DB.C(collection)
+	pipe := Col.Pipe(query)
+	return pipe.All(mdl)
 }
 
 // ------------------- MOCK ------------------ //
@@ -230,5 +238,10 @@ func (m *MongoMock) Find(collection string, query bson.M, mdl *[]interface{}, pa
 	if m.InterfaceReturnArray == nil {
 		return errors.New("error")
 	}
+	return nil
+}
+
+// Pipe : Function to join 1 or more collection.
+func (m *MongoMock) Pipe(collection string, query []bson.M, mdl *[]interface{}) error {
 	return nil
 }

@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/hilmansyafei/go-package/status"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/sepulsa/canopus-gope/status"
 	"github.com/sirupsen/logrus"
 )
 

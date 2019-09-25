@@ -1,4 +1,4 @@
-// Package status is used to write status based on Sedekahnesia standard
+// Package status is used to write status based on Canopus standard
 package status
 
 // Status holds data for status info
@@ -38,10 +38,17 @@ func NewError(code int, message string) Status {
 }
 
 var (
-	// List Of Success
-	OKSuccess      = NewSuccess(200, "Request Successed")
+	// List Of Success.
+	// OKSuccess used when all process in request is complete / valid.
+	OKSuccess = NewSuccess(200, "Request Successed")
+	// CreatedSuccess used when success insert/update/delete data to database.
 	CreatedSuccess = NewSuccess(201, "The request has been fulfilled")
-	DataNotFound   = NewSuccess(404, "Data Not Found")
+	// InvalidSignature used when request success connect to server but signature is invalid.
+	InvalidSignature = NewSuccess(403, "Invalid Signature")
+	// InvalidSignature used when request success connect to server but credentail is invalid.
+	InvalidAccount = NewSuccess(403, "Invalid MID / username / secret")
+	// DataNotFound used when GET request success connect to server but data is not found.
+	DataNotFound = NewSuccess(404, "Data Not Found")
 
 	// List Of Error (Request)
 	BadRequestError           = NewError(400, "Bad Request")
@@ -55,6 +62,7 @@ var (
 	MissingArgumentsError     = NewError(419, "The endpoint resource is missing required arguments")
 	InvalidArgumentsError     = NewError(420, "The endpoint resource does not support one or more of the given parameters")
 	UnprocessableEntityError  = NewError(422, "The request body is not appropriate")
+	Conflict                  = NewError(409, "The request body is conflict")
 
 	// List Of Error (Server)
 	InternalServerError = NewError(500, "Internal server error")
